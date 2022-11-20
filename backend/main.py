@@ -17,9 +17,11 @@ def main():
 
     #psuedocode for web scraper
     #for course in list_of_courses:
-    #    response = requests.post(URL + str(int(time.time())) + s.getURLparams(course)).json
-    #    selectit : int = ...
-    #    write directly to a csv file OR selectit_dict[course] = selectit
+    #    response = requests.post(s.getURL(course))
+    #    for idx in FIND EVERY SUBSTRING OF 'value=' IN response.text
+        #    selectit : int = int( response.text[idx+7:idx+17] SOME OFFSET OF THAT SUBSTRING )
+        #    course_code : str = SOME OFFSET OF THE INDEX POINTING TO THAT SUBSTRING
+        #    write directly to a csv file
     #    time.sleep(0.1)
 
 

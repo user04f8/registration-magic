@@ -51,6 +51,7 @@ class Semester():
         self.courses += (course,)
     
     def popCourse(self):
+        
         pass
         
     def getURLparams(self, course : Course):
