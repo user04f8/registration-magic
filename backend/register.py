@@ -5,6 +5,5 @@ class RegistrationRequester():
         pass
 
     def request():
-        print('Hello world!')        
-
+        print('Hello world!')
         

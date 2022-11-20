@@ -1,6 +1,4 @@
 
-
-
 class Course():
     def __init__(self, college : str, department : str, course_num : int, section : str, section_prefs=None):
         """Initializes a Course object storing course information
@@ -10,10 +8,6 @@ class Course():
         course_num: an integer defining the course number, e.g. 327, 100 <= course_num <= 999
         section: alphanumeric string defining the section
         """
-        #assert(isinstance(college, str) and len(college) == 3,
-        #    AssertionError(f'college "{college}" must be a 3-letter string!'))
-        #assert(isinstance(department, str) and len(department) == 2,
-        #    AssertionError(f'deparment "{department}" must be a 2-letter string!'))
         
         self.college = college
         self.department = department
@@ -34,6 +28,9 @@ class Course():
         """
         return f'?SelectIt={self.selectit}&Section={self.section}'
 
+a = Course('ENG', 'EC', 327, 'A1')
+print(a.getURLparams())
+
 class Semester():
     REGISTER_URL_PARAMS = '&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd='
     BOILERPLATE_URL_PARAMS = '&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList='
@@ -53,6 +50,7 @@ class Semester():
 
     def addCourse(self, course : Course):
         self.courses += (course,)
+        print('HI!')
         
     
     def popCourse(self):
@@ -61,3 +59,8 @@ class Semester():
     def getURLparams(self, course : Course):
         
         return course.getURLparams() + self.REGISTER_URL_PARAMS + self.semester_url_params + self.BOILERPLATE_URL_PARAMS
+
+s = Semester()
+
+s.addCourse(Course(...))
+
