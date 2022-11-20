@@ -13,4 +13,6 @@ parenthesis = optional
   - (User login page)
 - Python backend
   - Ability to send requests from backend to Student Link to make the registration requests
+  - Storing all SelectIt IDs for every course
+    - web scraping
 - (Firebase database, or MongoDB -- can decide later for storing user data through authentication)

@@ -1,4 +1,6 @@
 
+selectits = {}
+
 class Course():
     def __init__(self, college : str, department : str, course_num : int, section : str, section_prefs=None):
         """Initializes a Course object storing course information
@@ -13,7 +15,7 @@ class Course():
         self.department = department
         self.course_num = course_num
         self.section = section
-        self.selectit = 0 #TODO
+        self.selectit = ... #TODO
 
         if section_prefs is not None:
             raise NotImplementedError #TODO: selection preferences
