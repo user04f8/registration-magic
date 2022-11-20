@@ -15,4 +15,5 @@ parenthesis = optional
   - Ability to send requests from backend to Student Link to make the registration requests
   - Storing all SelectIt IDs for every course
     - web scraping
+    - ** can scrape from value token of the input tag defining the checkbox TL;DR use the checkbox to get SelectIt info **
 - (Firebase database, or MongoDB -- can decide later for storing user data through authentication)

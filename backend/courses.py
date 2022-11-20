@@ -54,6 +54,6 @@ class Semester():
         pass
         
     def getURLparams(self, course : Course):
-        
+        # TODO write a generator to go through every course in a semseter
         return course.getURLparams() + self.REGISTER_URL_PARAMS + self.semester_url_params + self.BOILERPLATE_URL_PARAMS
 
