@@ -28,9 +28,6 @@ class Course():
         """
         return f'?SelectIt={self.selectit}&Section={self.section}'
 
-a = Course('ENG', 'EC', 327, 'A1')
-print(a.getURLparams())
-
 class Semester():
     REGISTER_URL_PARAMS = '&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd='
     BOILERPLATE_URL_PARAMS = '&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList='
@@ -50,17 +47,11 @@ class Semester():
 
     def addCourse(self, course : Course):
         self.courses += (course,)
-        print('HI!')
-        
     
     def popCourse(self):
-
+        pass
         
     def getURLparams(self, course : Course):
         
         return course.getURLparams() + self.REGISTER_URL_PARAMS + self.semester_url_params + self.BOILERPLATE_URL_PARAMS
-
-s = Semester()
-
-s.addCourse(Course(...))
 
