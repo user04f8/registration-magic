@@ -26,16 +26,17 @@ class _TextBox extends State<TextBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: TextField(
-        controller: _controller,
-        obscureText: false,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Enter your name',
-          hintText: 'Enter your username',
+        child: TextField(
+          controller: _controller,
+          obscureText: false,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Enter your name',
+            hintText: 'Enter your username',
+          ),
         ),
-      )
-          /*
+
+        /*
           onSubmitted: (String value) async {
             await showDialog<void>(
               context: context,
@@ -59,7 +60,7 @@ class _TextBox extends State<TextBox> {
                 
               },
               */
-          ),
+      ),
     );
   }
 }

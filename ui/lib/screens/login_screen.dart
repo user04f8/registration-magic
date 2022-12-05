@@ -136,7 +136,9 @@ class _LoginDesktopState extends State<LoginDesktop> {
                 ),
                 const SizedBox(height: 35),
                 TextField(
-                  obscureText: true,
+                  obscureText: false,
+                  //cursorColor: Colors.black,
+                  style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
