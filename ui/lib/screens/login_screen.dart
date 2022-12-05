@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui/screens/home_screen.dart';
+import 'package:ui/screens/Widgets/login_app_bar.dart';
+import 'package:ui/screens/Widgets/login_text_box.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -7,6 +9,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(90.0),
+        child: LoginAppBar(),
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth < 600) {
@@ -55,15 +61,16 @@ class _LoginMobileState extends State<LoginMobile> {
                     'Login to your account',
                   ),
                   const SizedBox(height: 35),
-                  TextField(
-                    obscureText: true,
+/*                  TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
                       hintText: 'Enter Email address',
                     ),
                   ),
+                  */
                   const SizedBox(height: 20),
+                  TextBox(),
                   TextField(
                     obscureText: true,
                     decoration: InputDecoration(
@@ -166,4 +173,3 @@ class _LoginDesktopState extends State<LoginDesktop> {
     );
   }
 }
-
