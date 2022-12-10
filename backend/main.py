@@ -18,14 +18,6 @@ def main():
     
     user.register()
     
-    #for url in url_generator(s, planner=False):
-    #    print(url)
-    #    response = requests.post(url)
-    #    print(response)
-    #    print(response.text)
-    #    time.sleep(0.01)
-
-    #print('Initializing backend...')
     #TODO: run some sort of python server e.g. Django to handle requests from the frontend
 
     
