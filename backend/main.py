@@ -2,14 +2,18 @@ import requests
 import time
 
 from courses import Semester, Course
+from coursedb import CourseDB
 from utils import url_generator
 
-
+COURSE_DATABASE_FILENAME = 'Course_Info.xlsx'
 
 def main():
+
+    coursedb = CourseDB(COURSE_DATABASE_FILENAME)
     
     s = Semester('Spring', 2023)
-    s.add_course(Course('ENG', 'EC', 327, 'A1'))
+    s.add_course(Course(coursedb, 'CAS', 'AA', 112))
+    #s.add_course(Course(coursedb, 'ENG', 'EC', 327, 'A1'))
     for url in url_generator(s, planner=False):
         print(url)
         exit()

@@ -1,7 +1,9 @@
+import numpy as np
+
 from coursedb import CourseDB
 
 class Course:
-    def __init__(self, coursedb : CourseDB, college : str, department : str, course_num : int, section : str, section_prefs=None):
+    def __init__(self, coursedb : CourseDB, college : str, department : str, course_num : int, section : str = None, section_prefs=None):
         """Initializes a Course object storing course information
         
         college: a 3-letter string defining the college, e.g. 'ENG'
@@ -10,17 +12,18 @@ class Course:
         section: alphanumeric string defining the section
         """
         
-        self.college = college
-        self.department = department
-        self.course_num = course_num
-        self.section = section
-        self.selectit = coursedb.load_selectit(college, department, course_num, section) #TODO
-
+        self.college : str = college
+        self.department : str = department
+        self.course_num : int = course_num
+        self.section : str
+        self.selectit : np.int32
+        self.section, self.selectit = coursedb.load_selectit(college, department, course_num, section)
+ 
         if section_prefs is not None:
             raise NotImplementedError #TODO: selection preferences
 
     def __str__(self):
-        return ' '.join((self.college, self.department, str(self.course_num)))
+        return ' '.join((self.college, self.department, self.course_num))
 
     def getURLparams(self):
         """Return the URL params associated with a course for making a request to the Student Link
