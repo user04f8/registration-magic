@@ -1,8 +1,7 @@
+from coursedb import CourseDB
 
-selectits = {}
-
-class Course():
-    def __init__(self, college : str, department : str, course_num : int, section : str, section_prefs=None):
+class Course:
+    def __init__(self, coursedb : CourseDB, college : str, department : str, course_num : int, section : str, section_prefs=None):
         """Initializes a Course object storing course information
         
         college: a 3-letter string defining the college, e.g. 'ENG'
@@ -15,7 +14,7 @@ class Course():
         self.department = department
         self.course_num = course_num
         self.section = section
-        self.selectit = ... #TODO
+        self.selectit = coursedb.load_selectit(college, department, course_num, section) #TODO
 
         if section_prefs is not None:
             raise NotImplementedError #TODO: selection preferences
@@ -32,6 +31,7 @@ class Course():
 
 class Semester():
     REGISTER_URL_PARAMS = '&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd='
+    PLAN_URL_PARAMS = REGISTER_URL_PARAMS + 'Y'
     BOILERPLATE_URL_PARAMS = '&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList='
     def __init__(self, semester : str, year : int):
         """Returns a Semester object given a semester and Course objects
@@ -47,14 +47,23 @@ class Semester():
         self.semester_url_params : str = f'&ViewSem={semester_year}&KeySem={year_key}'
         self.courses = ()
 
-    def addCourse(self, course : Course):
+    def add_course(self, course : Course):
         self.courses += (course,)
     
-    def popCourse(self):
+    def pop_course(self):
+        ret = self.course[0]
+        self.courses = self.courses[:-1]
+        return ret
+    
+    def course_iter(self):
+        for course in self.courses:
+            yield course
+        return StopIteration
         
-        pass
-        
-    def getURLparams(self, course : Course):
+    def getURLparams(self, course : Course, planner=False):
         # TODO write a generator to go through every course in a semseter
-        return course.getURLparams() + self.REGISTER_URL_PARAMS + self.semester_url_params + self.BOILERPLATE_URL_PARAMS
+        if planner:
+            return ''.join((course.getURLparams(), Semester.PLAN_URL_PARAMS, self.semester_url_params, Semester.BOILERPLATE_URL_PARAMS))
+            # add 'Y' to AddPlannerInd= to add to planner (not real course registration)
+        return ''.join((course.getURLparams(), Semester.REGISTER_URL_PARAMS, self.semester_url_params, Semester.BOILERPLATE_URL_PARAMS))
 

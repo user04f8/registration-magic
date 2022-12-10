@@ -2,28 +2,40 @@ import requests
 import time
 
 from courses import Semester, Course
+from utils import url_generator
+
 
 
 def main():
-    URL = 'https://www.bu.edu/link/bin/uiscgi_studentlink.pl/'
-    s = Semester('Spring', 2023)
-    c = Course('ENG', 'EC', 327, 'A1')
-    url = URL + str(int(time.time())) + s.getURLparams(c)
     
-    print(requests.post(url).json)
+    s = Semester('Spring', 2023)
+    s.add_course(Course('ENG', 'EC', 327, 'A1'))
+    for url in url_generator(s, planner=False):
+        print(url)
+        exit()
+        response = requests.post(url)
+        print(response)
+        print(response.text)
+        time.sleep(0.01)
 
-    list_of_courses : list
-    selectit_dict : dict
+    
 
     #psuedocode for web scraper
-    #for course in list_of_courses:
-    #    response = requests.post(s.getURL(course))
-    #    for idx in FIND EVERY SUBSTRING OF 'value=' IN response.text
-        #    selectit : int = int( response.text[idx+7:idx+17] SOME OFFSET OF THAT SUBSTRING )
-        #    course_code : str = SOME OFFSET OF THE INDEX POINTING TO THAT SUBSTRING
-        #    write directly to a csv file
-    #    time.sleep(0.1)
-
+    """
+    s = Semester('Spring', 2023)
+    course = Course('CAS','AA','111','A1')
+    while not stop:
+        response = requests.post(s.getURL(course))
+        for idx in FIND EVERY SUBSTRING OF 'value=' IN response.text
+            selectit : int = int( response.text[idx+7:idx+17] SOME OFFSET OF THAT SUBSTRING )
+            course_code : str = SOME OFFSET OF THE INDEX POINTING TO THAT SUBSTRING
+            write directly to a csv file
+            if (ARE WE AT THE LAST 4 INSTANCES OF VALUE):
+                break
+        course_info = VALUES AT LAST 4 INSTANCES OF value="..."
+        course = Course(*course_info)
+        time.sleep(0.1)
+    """
 
     #print('Initializing backend...')
     #TODO: run some sort of python server e.g. Django to handle requests from the frontend

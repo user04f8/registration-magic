@@ -1,7 +1,7 @@
 import requests
 
 class RegistrationRequester():
-    def __init__(self, ):
+    def __init__(self):
         pass
 
     def request():
