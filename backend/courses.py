@@ -1,4 +1,5 @@
 import numpy as np
+import queue
 
 from coursedb import CourseDB
 
@@ -15,10 +16,14 @@ class Course:
         self.college : str = college
         self.department : str = department
         self.course_num : int = course_num
-        self.section : str
-        self.selectit : np.int32
-        self.section, self.selectit = coursedb.load_selectit(college, department, course_num, section)
- 
+        if section is None:
+            self.section : str
+            self.selectit : np.int32
+            self.selectit, self.section = coursedb.load_selectit_and_section(college, department, course_num)
+        else:
+            self.section : str = section
+            self.selectit : np.int32 = coursedb.load_selectit(college, department, course_num, section)
+
         if section_prefs is not None:
             raise NotImplementedError #TODO: selection preferences
 
@@ -44,23 +49,32 @@ class Semester():
         """
         #self.semester = semester
         #self.year = year
+        self.id : int = Semester.getid(semester, year) # For the User() class to keep a dictionary of semesters
         semester_year = semester + '+' + str(year)
         year_key = str(year) + str(year + 1)[-1]
         # TODO year 2029 problem: I can't test how student link handles the year key 2029-2030, assume it's 20290
         self.semester_url_params : str = f'&ViewSem={semester_year}&KeySem={year_key}'
-        self.courses = ()
+        self.courses : queue.Queue = queue.Queue()
+
+    @staticmethod
+    def getid(semester : str, year : int):
+        return (year << 8) + ord(semester[0])
 
     def add_course(self, course : Course):
-        self.courses += (course,)
+        self.courses.put(course)
+        return self
     
     def pop_course(self):
-        ret = self.course[0]
-        self.courses = self.courses[:-1]
-        return ret
+        if self.courses.qsize() == 0:
+            return None
+        else:
+            return self.courses.get()
     
     def course_iter(self):
-        for course in self.courses:
+        course = self.pop_course()
+        while course is not None:
             yield course
+            course = self.pop_course()
         return StopIteration
         
     def getURLparams(self, course : Course, planner=False):
