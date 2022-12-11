@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ui/util/dialog_box.dart';
+import 'package:ui/util/time_box.dart';
 import 'package:ui/util/todo_tile.dart';
 import 'package:ui/data/database.dart';
 
@@ -27,8 +28,11 @@ class _HomePageState extends State<HomePage> {
     } else {
       // there already exists data
       db.loadData();
+      db.loadTime();
       String foolist = db.showClasses();
       print(foolist);
+
+
     }
 
     super.initState();
@@ -46,6 +50,16 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
     db.updateDataBase();
   }
+  void saveNewTime() {
+    setState(() {
+      db.regTime.clear();
+      db.regTime.add([_controller.text]);
+      _controller.clear();
+    });
+    Navigator.of(context).pop();
+    db.updateTime();
+    db.returnLatestTime();
+  }
 
   // add new class
   void createNewTask() {
@@ -55,6 +69,18 @@ class _HomePageState extends State<HomePage> {
         return DialogBox(
           controller: _controller,
           onSave: saveNewTask,
+          onCancel: () => Navigator.of(context).pop(),
+        );
+      },
+    );
+  }
+  void cTime() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return timeInput(
+          controller: _controller,
+          onSave: saveNewTime,
           onCancel: () => Navigator.of(context).pop(),
         );
       },
@@ -81,15 +107,39 @@ class _HomePageState extends State<HomePage> {
         onPressed: createNewTask,
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-        itemCount: db.classList.length,
-        itemBuilder: (context, index) {
-          return ToDoTile(
-            taskName: db.classList[index][0],
-            deleteFunction: (context) => deleteTask(index),
-          );
-        },
-      ),
+      body: Column(
+        children: [
+          Container(
+            height: 100,
+            width: 100,
+            alignment: Alignment.bottomCenter,
+            child: TextButton(style: TextButton.styleFrom(
+              textStyle: TextStyle(fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+              ),
+            ),
+              child: Text("REGISTER",),
+              onPressed: cTime,
+
+
+            ),
+          ),
+          Container(
+            height: 500,
+            child: ListView.builder(
+              itemCount: db.classList.length,
+              itemBuilder: (context, index) {
+                return ToDoTile(
+                  taskName: db.classList[index][0],
+                  deleteFunction: (context) => deleteTask(index),
+                );
+              },
+            ),
+          )
+        ],
+      )
     );
   }
+
 }
