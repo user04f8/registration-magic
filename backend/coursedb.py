@@ -8,7 +8,7 @@ class CourseNotFoundException(Exception):
 class CourseDB:
     SELECTIT = 'SelectIt'
     COLLEGE = 'College'
-    DEPARTMENT = 'Department'
+    DEPARTMENT = 'Dept'
     COURSE_NUM = 'CourseNum'
     SECTION = 'Section'
     COLUMN_ITER = ((SELECTIT, np.int32), (COLLEGE, str), (DEPARTMENT, str), (COURSE_NUM, int), (SECTION, str))
