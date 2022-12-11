@@ -10,6 +10,7 @@ class User:
         self.coursedb = coursedb
         self.active_sem_id = None
         self.sems = {}
+        self.schedule_time = None
 
     def set_active_semester(self, semester : str, year : int):
         self.active_sem_id = Semester.getid(semester, year)
