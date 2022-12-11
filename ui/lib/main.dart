@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui/screens/login_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'screens/home_page.dart';
 
-void main() {
+
+void main() async {
+  await Hive.initFlutter();
+  var box = await Hive.openBox('mybox');
   runApp(const MyApp());
 }
 
@@ -25,9 +30,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-      ),
+      theme: ThemeData(primarySwatch: Colors.brown),
       home: const LoginScreen(),
     );
   }
