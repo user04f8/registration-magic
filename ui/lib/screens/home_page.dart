@@ -13,11 +13,14 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+String text = "REGISTER!";
+
 
 class _HomePageState extends State<HomePage> {
   // reference the hive box
   final _myBox = Hive.box('mybox');
   ClassDB db = ClassDB();
+
 
   @override
   void initState() {
@@ -59,6 +62,18 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
     db.updateTime();
     db.returnLatestTime();
+    String add = db.returnLatestTime();
+  }
+  String displayTime(){
+    String string;
+    if (db.regTime.isEmpty == true){
+      string = "REGISTER!";
+    }
+    else{
+      String add = db.returnLatestTime();
+      string = "REGISTERED FOR: "+add;
+    }
+    return string;
   }
 
   // add new class
@@ -111,18 +126,20 @@ class _HomePageState extends State<HomePage> {
         children: [
           Container(
             height: 100,
-            width: 100,
+            width: 300,
             alignment: Alignment.bottomCenter,
             child: TextButton(style: TextButton.styleFrom(
               textStyle: TextStyle(fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.red,
+                  color: Colors.white,
               ),
             ),
-              child: Text("REGISTER",),
+              child: Text(displayTime(),
+                style: TextStyle(
+                  color: Colors.brown.shade100,
+                ),
+              ),
               onPressed: cTime,
-
-
             ),
           ),
           Container(
