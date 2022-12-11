@@ -79,9 +79,5 @@ def add_user(username : str):
     users[username] = User(coursedb)
 """
 
-
-    
-
-
 if __name__ == '__main__':
     app.run()
