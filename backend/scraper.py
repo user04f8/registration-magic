@@ -22,7 +22,7 @@ def browser_login() -> webdriver:
     username = secret.username
     password = secret.password
 
-    login_url = 'https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670304546?College=CAS&Dept=AA&Course=310&Section=A1&ModuleName=reg%2Fadd%2Fbrowse_schedule.pl&AddPreregInd=&AddPlannerInd=Y&ViewSem=Spring+2023&KeySem=20234&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList='
+    login_url = 'https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670705039?College=CAS&Dept=&Course=&Section=&ModuleName=reg%2Fadd%2Fbrowse_schedule.pl&AddPreregInd=&AddPlannerInd=Y&ViewSem=Spring+2023&KeySem=20234&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList='
     #get the url, and automatically login with credentials
     driver.get(login_url)
     driver.find_element(By.NAME, 'j_username').send_keys(username)
@@ -33,7 +33,7 @@ def browser_login() -> webdriver:
     driver.find_element(By.NAME, '_eventId_proceed').click()
     time.sleep(1)
 
-    #switches iframe in order to locate the button "call me" in for duo 2fa
+    #switches iframe in order to locate the button "call me" in for duo 2fa, clicks button
     driver.switch_to.frame('duo_iframe')
     driver.find_element(By.XPATH,'//*[@id="auth_methods"]/fieldset/div[1]/button').click()
     time.sleep(1)
@@ -41,19 +41,19 @@ def browser_login() -> webdriver:
     time.sleep(10)
     return driver
 
-#Function that was intended to break down the href link into the components of the course information
-    # def course_identifiers(course_url: str) -> list[str]:
-    #     index_first = course_url.find('ClassCd=') + 8
-    #     index_last = course_url.find('&TopicCd=')
-    #     course_url = course_url[index_first:index_last]
+#break down the href link into the components of the course information
+def course_identifiers(course_url: str) -> list[str]:
+    index_first = course_url.find('ClassCd=') + 8
+    index_last = course_url.find('&TopicCd=')
+    course_url = course_url[index_first:index_last]
 
-    #     college = course_url[0:3]
-    #     dept = course_url[3:5]
-    #     course_num = course_url[5:8]
-    #     section = course_url[11:]
+    college = course_url[0:3]
+    dept = course_url[3:5]
+    course_num = course_url[5:8]
+    section = course_url[11:]
 
-    #     course_info_list = [college, dept, course_num, section]
-    #     return course_info_list
+    course_info_list = [college, dept, course_num, section]
+    return course_info_list
 
 
 def web_scrape():
@@ -65,25 +65,17 @@ def web_scrape():
     outSheet = outWorkbook.add_worksheet()
     outSheet.write("A1", "SelectIt")
     outSheet.write("B1", "College")
+    outSheet.write("C1", "Dept")
+    outSheet.write("D1", "CourseNum")
+    outSheet.write("E1", "Section")
     #row counter n, variable used to increment each row in sheet
     #int counter i, increments array index
-    x,n,i = 1,1,0
+    n,i = 1,0
 
 
     colleges = ["CAS","BUA","CDS","CFS","CGS","COM","ENG","EOP","FRA","GMS","GRS","HUB","KHC","LAW","MED","MET","OTP","PDP","QST","SAR","SDM","SED","SHA","SPH","SSW","STH","XAS","XRG"]
     #runs until we reach the last page of the student link
     while True:
-
-    #Attempted to get href link for each course, but could not filter out links that are for courses that ARE available
-    #the href link contains ClassCd with all course information
-     #course_urls = set(driver.find_elements(By.TAG_NAME, 'a'))
-        # for course_url in course_urls:
-        #     c_info = course_url.get_attribute('href')
-        #     c_info_list = course_identifiers(c_info)
-        #     for count, info in enumerate(c_info_list):
-        #         outSheet.write(x, count, info)
-        #     x += 1
-        #     c_info_list = []
 
     #clicks on nextpage, else throws exception 
         try:
@@ -92,7 +84,14 @@ def web_scrape():
             for checkbox in checkboxes:
                 select_it = checkbox.get_attribute('value')
                 outSheet.write(n, 0, select_it)
-                outSheet.write(n, 1, colleges[i])
+
+                #extracting href link
+                current_td = checkbox.find_element(By.XPATH, "./../following-sibling::td/a[@href]")
+                c_info = current_td.get_attribute('href')
+                c_info_list = course_identifiers(c_info)
+                for count, info in enumerate(c_info_list, start=1):
+                    outSheet.write(n, count, info)
+                c_info_list = []
                 n += 1
             
             next_page = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/form/center[2]/table/tbody/tr/td[2]/input')))
@@ -132,4 +131,3 @@ def web_scrape():
 
 #main
 web_scrape()
-

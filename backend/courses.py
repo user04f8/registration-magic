@@ -1,8 +1,10 @@
+import numpy as np
+import queue
 
-selectits = {}
+from coursedb import CourseDB
 
-class Course():
-    def __init__(self, college : str, department : str, course_num : int, section : str, section_prefs=None):
+class Course:
+    def __init__(self, coursedb : CourseDB, college : str, department : str, course_num : int, section : str = None, section_prefs=None):
         """Initializes a Course object storing course information
         
         college: a 3-letter string defining the college, e.g. 'ENG'
@@ -11,17 +13,22 @@ class Course():
         section: alphanumeric string defining the section
         """
         
-        self.college = college
-        self.department = department
-        self.course_num = course_num
-        self.section = section
-        self.selectit = ... #TODO
+        self.college : str = college
+        self.department : str = department
+        self.course_num : int = course_num
+        if section is None:
+            self.section : str
+            self.selectit : np.int32
+            self.selectit, self.section = coursedb.load_selectit_and_section(college, department, course_num)
+        else:
+            self.section : str = section
+            self.selectit : np.int32 = coursedb.load_selectit(college, department, course_num, section)
 
         if section_prefs is not None:
             raise NotImplementedError #TODO: selection preferences
 
     def __str__(self):
-        return ' '.join((self.college, self.department, str(self.course_num)))
+        return ' '.join((self.college, self.department, self.course_num))
 
     def getURLparams(self):
         """Return the URL params associated with a course for making a request to the Student Link
@@ -32,6 +39,7 @@ class Course():
 
 class Semester():
     REGISTER_URL_PARAMS = '&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd='
+    PLAN_URL_PARAMS = REGISTER_URL_PARAMS + 'Y'
     BOILERPLATE_URL_PARAMS = '&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList='
     def __init__(self, semester : str, year : int):
         """Returns a Semester object given a semester and Course objects
@@ -41,20 +49,38 @@ class Semester():
         """
         #self.semester = semester
         #self.year = year
+        self.id : int = Semester.getid(semester, year) # For the User() class to keep a dictionary of semesters
         semester_year = semester + '+' + str(year)
         year_key = str(year) + str(year + 1)[-1]
         # TODO year 2029 problem: I can't test how student link handles the year key 2029-2030, assume it's 20290
         self.semester_url_params : str = f'&ViewSem={semester_year}&KeySem={year_key}'
-        self.courses = ()
+        self.courses : queue.Queue = queue.Queue()
 
-    def addCourse(self, course : Course):
-        self.courses += (course,)
+    @staticmethod
+    def getid(semester : str, year : int):
+        return (year << 8) + ord(semester[0])
+
+    def add_course(self, course : Course):
+        self.courses.put(course)
+        return self
     
-    def popCourse(self):
+    def pop_course(self):
+        if self.courses.qsize() == 0:
+            return None
+        else:
+            return self.courses.get()
+    
+    def course_iter(self):
+        course = self.pop_course()
+        while course is not None:
+            yield course
+            course = self.pop_course()
+        return StopIteration
         
-        pass
-        
-    def getURLparams(self, course : Course):
+    def getURLparams(self, course : Course, planner=False):
         # TODO write a generator to go through every course in a semseter
-        return course.getURLparams() + self.REGISTER_URL_PARAMS + self.semester_url_params + self.BOILERPLATE_URL_PARAMS
+        if planner:
+            return ''.join((course.getURLparams(), Semester.PLAN_URL_PARAMS, self.semester_url_params, Semester.BOILERPLATE_URL_PARAMS))
+            # add 'Y' to AddPlannerInd= to add to planner (not real course registration)
+        return ''.join((course.getURLparams(), Semester.REGISTER_URL_PARAMS, self.semester_url_params, Semester.BOILERPLATE_URL_PARAMS))
 
