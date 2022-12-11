@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown.shade400,
+      backgroundColor: Colors.red.shade900,
       appBar: AppBar(
         title: Text('REGISTRATION MAGIC'),
         elevation: 0,
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
             ),
               child: Text(displayTime(),
                 style: TextStyle(
-                  color: Colors.brown.shade100,
+                  color: Colors.red.shade900,
                 ),
               ),
               onPressed: cTime,
