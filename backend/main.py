@@ -47,8 +47,8 @@ user = User(coursedb) # initialize a default user for now
 loop = asyncio.get_event_loop() # initialize an event loop to schedule registration at specific times
 
 @app.route('/')
-def schedule_registration(courses : list(str) , timestr : str) -> flask.Response: # bind the Flask input to this method
-    scheduled_time = datetime.strptime(timestr, '%d/%m/%Y-%H:%M:%S.%f')
+def schedule_registration(courses, timestr : str) -> flask.Response: # bind the Flask input to this method
+    scheduled_time = datetime.strptime(timestr, r'%d/%m/%Y-%H:%M:%S.%f')
     
     for course in courses:
         user.add_course(Course(coursedb, *preprocess_user_input(course)))    
@@ -78,10 +78,6 @@ users : dict(User) = {}
 def add_user(username : str):
     users[username] = User(coursedb)
 """
-
-
-    
-
 
 if __name__ == '__main__':
     app.run()
