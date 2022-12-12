@@ -34,7 +34,7 @@ user.prep_auth() # capture the user's auth token by having them sign in to the s
 loop = asyncio.new_event_loop() # initialize an event loop to schedule registration at specific times
 
 async def run_app():
-    app.run(host='127.0.0.1', port=53303)
+    await app.run(host='127.0.0.1', port=53303)
 
 @app.route('/', methods=['GET', 'POST'])
 def default_output():

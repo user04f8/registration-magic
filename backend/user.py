@@ -34,14 +34,14 @@ class User:
     def prep_auth():
         webbrowser.open(get_auth_url())
 
-    def register(self):
+    def register(self, planner=False):
         if self.active_sem_id is not None:
             active_semester : Semester = self.sems[self.active_sem_id]
         else:
             raise Exception('No active semester id set, use set_active_semester() first')
 
         i = 0
-        for url in url_generator(active_semester, planner=False):
+        for url in url_generator(active_semester, planner):
             print(url)
             webbrowser.open(url) # for locally hosted backend
 
