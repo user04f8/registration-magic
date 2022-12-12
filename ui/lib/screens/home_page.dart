@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage> {
       // there already exists data
       db.loadData();
       db.loadTime();
+      displayTime();
+      String thyme = displayTime();
     }
 
     super.initState();
@@ -59,8 +61,10 @@ class _HomePageState extends State<HomePage> {
       _controller.clear();
     });
     Navigator.of(context).pop();
+
     db.updateTime();
     db.returnLatestTime();
+    displayTime();
     String time = db.returnLatestTime();
     String classList = db.returnJsonList();
     //Uri uri = Uri.https('127.0.0.1:5000', 'request');
@@ -81,14 +85,17 @@ class _HomePageState extends State<HomePage> {
   }
   String displayTime(){
     String string;
-    if (db.regTime.isEmpty == true){
-      string = "REGISTER!";
+    db.loadTime();
+    if (db.regTime.isEmpty == true || db.regTime == [] || db.regTime == null||
+        db.regTime[0][0] == ""){
+      text = "REGISTER!";
     }
     else{
       String add = db.returnLatestTime();
-      string = "REGISTERED FOR: "+add;
+      text = "REGISTERED FOR: "+add;
     }
-    return string;
+    print (db.regTime[0]);
+    return text;
   }
 
   // add new class
@@ -143,13 +150,11 @@ class _HomePageState extends State<HomePage> {
             height: 100,
             width: 300,
             alignment: Alignment.bottomCenter,
-            child: TextButton(style: TextButton.styleFrom(
-              textStyle: TextStyle(fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-              ),
+            child: OutlinedButton(style: ButtonStyle(
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+
             ),
-              child: Text(displayTime(),
+              child: Text(text,
                 style: TextStyle(
                   color: Colors.brown.shade100,
                 ),
