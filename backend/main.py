@@ -3,6 +3,7 @@ import requests
 #import time
 from datetime import datetime
 import asyncio
+import threading
 import json
 
 #import schedule
@@ -33,8 +34,11 @@ user.set_active_semester(*DEFAULT_SEMESTER)
 user.prep_auth() # capture the user's auth token by having them sign in to the student link
 loop = asyncio.new_event_loop() # initialize an event loop to schedule registration at specific times
 
-async def run_app():
-    await app.run(host='127.0.0.1', port=53303)
+def run_app():
+    app.run(host='127.0.0.1', port=53303)
+
+def run_loop():
+    loop.run_forever()
 
 @app.route('/', methods=['GET', 'POST'])
 def default_output():
@@ -69,10 +73,13 @@ def test_scheduler():
     schedule_registration(data = {'classList': '[["CAS MA225 B2"]]', 'time': '12/11/2022 10:53 PM'})
 
 if __name__ == '__main__':
-    #test_scheduler()
-    loop.create_task(run_app())
+    test_scheduler()
+    loop_thread = threading.Thread(target=run_loop)
+    loop_thread.start()
     print('Asyncio initialization complete')
-    loop.run_forever()
+    run_app()
+    print('Flask app forcibly stopped, ctrl + c to close loop thread')
+    loop_thread.join()
     
 
 """
