@@ -13,8 +13,8 @@ class ClassDB {
   // run this method if this is the 1st time ever opening this app
   void createInitialData() {
     classList = [
-      ["EC419 B2"],
-      ["EC330 A2"],
+      ["ENG EC419 B2"],
+      ["ENG EC330 A2"],
     ];
   }
 
