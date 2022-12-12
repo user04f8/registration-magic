@@ -78,8 +78,8 @@ if __name__ == '__main__':
     loop_thread.start()
     print('Asyncio initialization complete')
     run_app()
-    print('Flask app forcibly stopped, ctrl + c to close loop thread')
-    loop_thread.join()
+    print('Flask app forcibly stopped; closing loop thread')
+    loop_thread._running = False
     
 
 """
