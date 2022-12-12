@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'my_button.dart';
 
-class DialogBox extends StatelessWidget {
+
+class timeInput extends StatelessWidget {
   final controller;
   VoidCallback onSave;
   VoidCallback onCancel;
 
-  DialogBox({
+  timeInput({
     super.key,
     required this.controller,
     required this.onSave,
@@ -17,7 +17,7 @@ class DialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.red.shade400,
+      backgroundColor: Colors.brown.shade100,
       content: Container(
         height: 120,
         child: Column(
@@ -28,7 +28,7 @@ class DialogBox extends StatelessWidget {
               controller: controller,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "CAS MA225 B2",
+                hintText: "09/17/2003 5:30PM",
               ),
             ),
 

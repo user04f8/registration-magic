@@ -28,7 +28,7 @@ class Course:
             raise NotImplementedError #TODO: selection preferences
 
     def __str__(self):
-        return ' '.join((self.college, self.department, self.course_num))
+        return ' '.join((self.college, self.department, str(self.course_num)))
 
     def getURLparams(self):
         """Return the URL params associated with a course for making a request to the Student Link

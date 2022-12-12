@@ -20,6 +20,7 @@ class User:
     def add_course(self, course : Course):
         if self.active_sem_id is not None:
             self.sems[self.active_sem_id].add_course(course)
+            print(f"Course {course} successfully added!")
         else:
             raise Exception('No active semester id set, use set_active_semester() first')
 

@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class ClassDB {
   List classList = [];
+  List regTime = [];
 
   // reference our box
   final _myBox = Hive.box('mybox');
@@ -22,18 +23,30 @@ class ClassDB {
     classList = _myBox.get("CLASSLIST");
   }
 
-  String parseInputs(String string){
-    string.split(" ");
-    return string;
+  void setTime(String time){
+    _myBox.put("TIME", time);
+  }
+  void loadTime(){
+    regTime = _myBox.get("TIME");
+  }
+  void updateTime(){
+    _myBox.put("TIME", regTime);
   }
 
   // update the database
   void updateDataBase() {
     _myBox.put("CLASSLIST", classList);
   }
-  String showClasses() {
+  String returnJsonList() {
     loadData();
     String cList = jsonEncode(classList);
     return cList;
   }
+  String returnLatestTime() {
+    loadTime();
+    String cList = regTime[0][0].toString();
+    //print (cList);
+    return cList;
+  }
+
 }

@@ -86,7 +86,10 @@ class _LoginMobileState extends State<LoginMobile> {
                   const SizedBox(height: 30),
                   TextButton(
                     child: const Text('Login'),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    },
                     //...
                   ),
                 ],
