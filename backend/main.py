@@ -16,6 +16,7 @@ from utils import url_generator, preprocess_user_input
 COURSE_DATABASE_FILENAME = 'Course_Info.xlsx'
 SCHEDULED_EVENTS_INTERVAL = 1 # seconds per checking scheduled events
 DEFAULT_TIME = datetime(2022, 12, 11, 20, 0, 0)
+DEFAULT_SEMESTER = ('Spring, 2022')
 
 async def run_at(dt, method):
     await asyncio.sleep((dt - datetime.now()).total_seconds()) # requires python version 3.8 or above
@@ -28,7 +29,7 @@ async def register(user : User):
 app = flask.Flask(__name__) # initialize the Flask app
 coursedb = CourseDB(COURSE_DATABASE_FILENAME) # initialize the database
 user = User(coursedb) # initialize a default user for now
-user.set_active_semester('Spring', 2022)
+user.set_active_semester(*DEFAULT_SEMESTER)
 user.prep_auth() # capture the user's auth token by having them sign in to the student link
 loop = asyncio.new_event_loop() # initialize an event loop to schedule registration at specific times
 
