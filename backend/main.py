@@ -58,21 +58,34 @@ def api_request_handler() -> flask.Response: # bind the Flask input to this meth
 
 def schedule_registration(data : str):
     print(data)
-    time_raw = data['time']
+    scheduled_time = 'now'
+    if 'time' not in data:
+        time_raw = 'NOW'
+    else:
+        time_raw = data['time']
     courses = json.loads(data['classList'])
     plan = 'plan' in data
-    try:
-        scheduled_time = datetime.strptime(time_raw, r'%d/%m/%Y %I:%M %p') # dd/mm/yyyy hh:mm [AM/PM]
-    except:
-        print(f"Warning: defaulting to time {DEFAULT_TIME}")
-        scheduled_time = DEFAULT_TIME # default time to avoid errors
+    if time_raw != 'NOW':
+        try:
+            scheduled_time = datetime.strptime(time_raw, r'%d/%m/%Y %I:%M %p') # dd/mm/yyyy hh:mm [AM/PM]
+        except:
+            print(f"Warning: defaulting to time {DEFAULT_TIME}")
+            scheduled_time = DEFAULT_TIME # default time to avoid errors
     print(f"Scheduling courses {courses} at {scheduled_time}")
     for course in courses:
         user.add_course(Course(coursedb, *preprocess_user_input(course[0])))
-    loop.create_task(run_at(scheduled_time, register(user)))
+    if time_raw != 'NOW':
+        sleeptime : int = (scheduled_time - datetime.now()).seconds + 86400 * (scheduled_time - datetime.now()).days
+        print(f'Waiting {sleeptime} seconds. . .')
+        sleep(sleeptime)
+    user.register()
+    #loop.create_task(run_at(scheduled_time, register(user)))    
 
 def test_scheduler():
-    schedule_registration(data = {'classList': '[["CAS AA385 A1"]]', 'time': '12/11/2022 11:44 PM'})
+    schedule_registration(data = {'classList': '[["CAS AA385 A1"]]', 'time': 'NOW'})
+
+#https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670822671?SelectIt=0001151409&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2023&KeySem=20234&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
+#https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670822639?SelectIt=0001151409&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2023&KeySem=20234&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
 
 #https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670820688?SelectIt=0001151409&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2023&KeySem=20234&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
 #https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670820707?SelectIt=0001151409&College=CAS&Dept=AA&Course=385&Section=A1&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2022&KeySem=20223&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
@@ -81,12 +94,13 @@ def test_scheduler():
 #https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670820825?SelectIt=0001151409&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2022&KeySem=20223&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
 
 if __name__ == '__main__':
-    #test_scheduler()
+    test_scheduler()
     loop_thread = threading.Thread(target=run_loop)
     loop_thread.start()
     print('Asyncio initialization complete')
     app_thread = threading.Thread(target=run_app)
     app_thread.start()
+    app_thread.join()
     print('Flask app forcibly stopped; stopping loop')
     loop.stop()
     print('Press CTRL+C to close remaining threads')
