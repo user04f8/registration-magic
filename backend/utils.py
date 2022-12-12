@@ -16,11 +16,11 @@ def preprocess_user_input(user_input : str) -> tuple:
     takes in user input in the following format, removing whitespace: 'ENGEC327A1'
     returns: tuple[str, str, int(, str)] (arguments for creating a Course() object)
     """
-    user_input = user_input.strip().replace(' ', '')
+    user_input = "".join(user_input.split()) # remove all whitespace
     #Assume user_input is valid (has already been validated on the frontend)
     if (len(user_input) == 8):
         return (user_input[0:3], user_input[3:5], int(user_input[5:8]))
     elif (len(user_input) == 10):
         return (user_input[0:3], user_input[3:5], int(user_input[5:8]), user_input[8:10])
     else:
-        raise Exception(f'Invalid user input {user_input}')
+        raise Exception(f'Invalid user input {user_input}\nshould be len == 8 (no section) or len == 8, got len == {len(user_input)}')
