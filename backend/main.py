@@ -17,27 +17,22 @@ COURSE_DATABASE_FILENAME = 'Course_Info.xlsx'
 SCHEDULED_EVENTS_INTERVAL = 1 # seconds per checking scheduled events
 DEFAULT_TIME = datetime(2022, 12, 11, 20, 0, 0)
 
-#async def wait_until(dt):
-#    await asyncio.sleep((dt - datetime.datetime.now()).total_seconds())
-
-async def wait_until(dt):
+"""async def wait_until(dt):
     # sleep until the specified datetime
-    now = datetime.datetime.now()
+    now = datetime.now()
     await asyncio.sleep((dt - now).total_seconds())
 
 async def run_at(dt, coro):
     await wait_until(dt)
     return await coro
-
-# https://stackoverflow.com/questions/51292027/how-to-schedule-a-task-in-asyncio-so-it-runs-at-a-certain-date
-
 """
+
 async def run_at(dt, method):
     await asyncio.sleep((dt - datetime.now()).total_seconds()) # requires python version 3.8 or above
     return await method
-    """
 
 async def register(user : User):
+    print('Performing course registration for user {user.id}:')
     user.register() # runs the register() method on the user exactly once 
 
 """
@@ -62,18 +57,25 @@ user = User(coursedb) # initialize a default user for now
 user.set_active_semester('Spring', 2022)
 loop = asyncio.new_event_loop() # initialize an event loop to schedule registration at specific times
 
+async def run_app():
+    app.run(host='127.0.0.1', port=53303)
 
 @app.route('/', methods=['GET', 'POST'])
 def default_output():
     print(flask.request.get_json())
     print(flask.request.json)
-    response = {'query': 'hello_world'}
+    response = {'status': 'Flask server online'}
     return flask.jsonify(response)
 
 @app.route('/request', methods=['POST'])
-def schedule_registration() -> flask.Response: # bind the Flask input to this method
-    data = flask.request.json #json.loads(flask.request.json)
-    # data = {'classList': '[["CAS MA225 B2"]]', 'time': '12/11/2022 9:00 PM'}
+def api_request_handler() -> flask.Response: # bind the Flask input to this method
+    data = flask.request.json
+    schedule_registration(data)
+    json_file = {}
+    #json_file['query'] = 'response'
+    return flask.jsonify(json_file)
+
+def schedule_registration(data : str):
     print(data)
     time_raw = data['time']
     courses = json.loads(data['classList'])
@@ -84,18 +86,18 @@ def schedule_registration() -> flask.Response: # bind the Flask input to this me
         scheduled_time = DEFAULT_TIME # default time to avoid errors
     print(f"Scheduling courses {courses} at {scheduled_time}")
     for course in courses:
-        print(course)
         user.add_course(Course(coursedb, *preprocess_user_input(course[0])))
     loop.create_task(run_at(scheduled_time, register(user)))
 
-    json_file = {}
-    #json_file['query'] = 'sample response'
-    return flask.jsonify(json_file)
-
+def test_scheduler():
+    schedule_registration(data = {'classList': '[["CAS MA225 B2"]]', 'time': '12/11/2022 10:46 PM'})
 
 if __name__ == '__main__':
-
-    app.run(host='127.0.0.1', port=53303)
+    #test_scheduler()
+    loop.create_task(run_app())
+    print('Asyncio initialization complete')
+    loop.run_forever()
+    
 
     """
     print('Flask stopped, press q then enter to close remaining threads...')
