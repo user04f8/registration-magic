@@ -81,11 +81,12 @@ def test_scheduler():
 #https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670820825?SelectIt=0001151409&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2022&KeySem=20223&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
 
 if __name__ == '__main__':
-    test_scheduler()
+    #test_scheduler()
     loop_thread = threading.Thread(target=run_loop)
     loop_thread.start()
     print('Asyncio initialization complete')
-    run_app()
+    app_thread = threading.Thread(target=run_app)
+    app_thread.start()
     print('Flask app forcibly stopped; stopping loop')
     loop.stop()
     print('Press CTRL+C to close remaining threads')

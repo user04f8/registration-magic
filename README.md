@@ -2,6 +2,18 @@
 Automate BU Registration
 
 
+## Running the project
+
+Open the flutter app and run the backend server.
+
+Flutter
+- open the built app available for Windows, Android, or iOS -- for developement, install Flutter and build main.dart, using `flutter pub get` to get dependencies
+
+Backend
+- `cd backend`
+- `py main.py`
+See `backend\README.md` for more details on running the backend server
+
 ## Project Structure
 
 parenthesis = optional
@@ -17,3 +29,4 @@ parenthesis = optional
     - web scraping
     - ** can scrape from value token of the input tag defining the checkbox TL;DR use the checkbox to get SelectIt info **
 - (Firebase database, or MongoDB -- can decide later for storing user data through authentication)
+
