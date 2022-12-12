@@ -100,19 +100,9 @@ if __name__ == '__main__':
     loop.run_forever()
     
 
-    """
-    print('Flask stopped, press q then enter to close remaining threads...')
-    inpt = ''
-    while (inpt != 'q'):
-        inpt = input()
-        print('Press q then enter to close remaining threads...')
-    stop_event.set()
-    """
-
 """
-#TODO add handling for multiple users?
 users : dict(User) = {}
-@app.route('/')
+@app.route('/adduser')
 def add_user(username : str):
     users[username] = User(coursedb)
 """
