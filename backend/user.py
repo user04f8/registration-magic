@@ -1,9 +1,10 @@
 import requests
 import time
+import webbrowser
 
 from courses import Semester, Course
 from coursedb import CourseDB
-from utils import url_generator
+from utils import url_generator, get_auth_url
 
 class User:
     def __init__(self, coursedb : CourseDB, id=0):
@@ -29,20 +30,30 @@ class User:
     # 
     # TODO: set a scheduler for this registration to occur at the requested time
 
+    @staticmethod
+    def prep_auth():
+        webbrowser.open(get_auth_url())
+
     def register(self):
         if self.active_sem_id is not None:
             active_semester : Semester = self.sems[self.active_sem_id]
         else:
             raise Exception('No active semester id set, use set_active_semester() first')
 
+        i = 0
         for url in url_generator(active_semester, planner=False):
             print(url)
-            response = requests.post(url) 
-            # TODO
-            # probably the easiest most user-friendly means is to show this URL in the frontend
-            print(response)
-            print(response.text)
-            time.sleep(0.1)
+            webbrowser.open(url) # for locally hosted backend
+
+            #response = requests.post(url)
+            # this method only works if the auth token has already been captured -- more user friendly to just use webbrowser instead
+            # of dealing with potential security issues with storing user's BU authentication and issues if auth token expires
+            # before registration starts
+            #print(response)
+            #print(response.text)            
+            if (i > 20):
+                time.sleep(0.1) # rate limit so we don't ddos student link
+            i += 1
     
     """
     def add_course_to_semester(self, course : Course, semester : str, year : int):

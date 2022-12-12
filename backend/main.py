@@ -55,6 +55,7 @@ app = flask.Flask(__name__) # initialize the Flask app
 coursedb = CourseDB(COURSE_DATABASE_FILENAME) # initialize the database
 user = User(coursedb) # initialize a default user for now
 user.set_active_semester('Spring', 2022)
+user.get_auth_url() # capture the user's auth token by having them sign in to the student link
 loop = asyncio.new_event_loop() # initialize an event loop to schedule registration at specific times
 
 async def run_app():
@@ -90,7 +91,7 @@ def schedule_registration(data : str):
     loop.create_task(run_at(scheduled_time, register(user)))
 
 def test_scheduler():
-    schedule_registration(data = {'classList': '[["CAS MA225 B2"]]', 'time': '12/11/2022 10:46 PM'})
+    schedule_registration(data = {'classList': '[["CAS MA225 B2"]]', 'time': '12/11/2022 10:53 PM'})
 
 if __name__ == '__main__':
     #test_scheduler()

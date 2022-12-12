@@ -13,5 +13,4 @@ If you'd like to run the web scraper, run `scraper.py` after `pip install seleni
 
 ## Dependencies
 
-`pip install requests`
-`pip install Flask`
+`pip install pandas numpy Flask webbrowser requests`

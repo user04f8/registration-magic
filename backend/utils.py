@@ -8,7 +8,10 @@ def url_generator(s : Semester, planner = False) -> str:
     for course in s.course_iter():
         yield URL_BASE + str(int(time.time())) + s.getURLparams(course, planner=planner)
 
-def preprocess_user_input(user_input : str):
+def get_auth_url() -> str:
+    return URL_BASE + str(int(time.time())) + '?ModuleName=menu.pl&NewMenu=Academics'
+
+def preprocess_user_input(user_input : str) -> tuple:
     """
     takes in user input in the following format, removing whitespace: 'ENGEC327A1'
     returns: tuple[str, str, int(, str)] (arguments for creating a Course() object)
