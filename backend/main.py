@@ -94,10 +94,10 @@ def test_scheduler():
     schedule_registration(data = {'classList': '[["CAS MA225 B2"]]', 'time': '12/11/2022 10:53 PM'})
 
 if __name__ == '__main__':
-    test_scheduler()
-    #loop.create_task(run_app())
-    #print('Asyncio initialization complete')
-    #loop.run_forever()
+    #test_scheduler()
+    loop.create_task(run_app())
+    print('Asyncio initialization complete')
+    loop.run_forever()
     
 
     """
