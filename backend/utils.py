@@ -9,7 +9,7 @@ def url_generator(s : Semester, planner = False) -> str:
         yield URL_BASE + str(int(time.time())) + s.getURLparams(course, planner=planner)
 
 def get_auth_url() -> str:
-    return URL_BASE + str(int(time.time())) + '?ModuleName=menu.pl&NewMenu=Academics'
+    return URL_BASE + str(int(time.time())) + '?ModuleName=regsched.pl'
 
 def preprocess_user_input(user_input : str) -> tuple:
     """
