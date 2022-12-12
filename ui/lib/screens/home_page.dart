@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -6,6 +8,7 @@ import 'package:ui/util/dialog_box.dart';
 import 'package:ui/util/time_box.dart';
 import 'package:ui/util/todo_tile.dart';
 import 'package:ui/data/database.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,10 +35,6 @@ class _HomePageState extends State<HomePage> {
       // there already exists data
       db.loadData();
       db.loadTime();
-      String foolist = db.showClasses();
-      print(foolist);
-
-
     }
 
     super.initState();
@@ -62,7 +61,23 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
     db.updateTime();
     db.returnLatestTime();
-    String add = db.returnLatestTime();
+    String time = db.returnLatestTime();
+    String classList = db.returnJsonList();
+    //Uri uri = Uri.https('127.0.0.1:5000', 'request');
+    sendRequest(time, classList);
+  }
+  Future<http.Response> sendRequest(String time, String classList) async {
+    print("sending request . . .");
+    Uri uri = Uri.parse("http://127.0.0.1:53303/request");
+    Future<http.Response> response = http.post(uri, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    }, body: jsonEncode(<String, String>{
+      'classList': classList,
+      'time': time,
+    }));
+    await response;
+    print("sent request to uri 127.0.0.1:53303");
+    return response;
   }
   String displayTime(){
     String string;

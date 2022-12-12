@@ -37,15 +37,15 @@ class ClassDB {
   void updateDataBase() {
     _myBox.put("CLASSLIST", classList);
   }
-  String showClasses() {
+  String returnJsonList() {
     loadData();
     String cList = jsonEncode(classList);
     return cList;
   }
   String returnLatestTime() {
     loadTime();
-    String cList = regTime[(regTime.length)-1].toString();
-    print (cList);
+    String cList = regTime[0][0].toString();
+    //print (cList);
     return cList;
   }
 
