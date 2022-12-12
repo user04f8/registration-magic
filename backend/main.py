@@ -16,7 +16,7 @@ from utils import url_generator, preprocess_user_input
 COURSE_DATABASE_FILENAME = 'Course_Info.xlsx'
 SCHEDULED_EVENTS_INTERVAL = 1 # seconds per checking scheduled events
 DEFAULT_TIME = datetime(2022, 12, 11, 20, 0, 0)
-DEFAULT_SEMESTER = ('Spring, 2022')
+DEFAULT_SEMESTER = ('Spring', 2022)
 
 async def run_at(dt, method):
     await asyncio.sleep((dt - datetime.now()).total_seconds()) # requires python version 3.8 or above
