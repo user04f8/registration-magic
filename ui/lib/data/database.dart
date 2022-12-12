@@ -7,18 +7,15 @@ class ClassDB {
   List classList = [];
   List regTime = [];
 
-  // reference our box
   final _myBox = Hive.box('mybox');
 
-  // run this method if this is the 1st time ever opening this app
-  void createInitialData() {
+  void createInitialData() {//default classes if no prior data
     classList = [
-      ["ENG EC419 B2"],
-      ["ENG EC330 A2"],
+      ["CAS AA385 A1"],
+      ["ENG AA489 A1"],
     ];
   }
 
-  // load the data from database
   void loadData() {
     classList = _myBox.get("CLASSLIST");
   }

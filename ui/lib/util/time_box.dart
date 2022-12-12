@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'my_button.dart';
+import 'button.dart';
 
 
 class timeInput extends StatelessWidget {

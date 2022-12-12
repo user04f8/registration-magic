@@ -7,7 +7,7 @@ import 'screens/home_page.dart';
 
 void main() async {
   await Hive.initFlutter();
-  var box = await Hive.openBox('mybox');
+  var box = await Hive.openBox('mybox');//opens local database
   runApp(const MyApp());
 }
 
@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.brown),
-      home: const LoginScreen(),
+      home: const LoginScreen(),//opens login screen
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ui/util/dialog_box.dart';
 import 'package:ui/util/time_box.dart';
-import 'package:ui/util/todo_tile.dart';
+import 'package:ui/util/class_box.dart';
 import 'package:ui/data/database.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // if this is the 1st time ever openin the app, then create default data
+    // if this is the 1st time ever openin the app, then create default classes
     db.loadData();
     if ((db.classList).isEmpty == true) {
       db.createInitialData();
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // add new class
-  void createNewTask() {
+  void createNewClass() {
     showDialog(
       context: context,
       builder: (context) {
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // delete task
-  void deleteTask(int index) {
+  void deleteClass(int index) {
     setState(() {
       db.classList.removeAt(index);
     });
@@ -141,12 +141,12 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: createNewTask,
+        onPressed: createNewClass,
         child: Icon(Icons.add),
       ),
       body: Column(
         children: [
-          Container(
+          Container(//registration button
             height: 100,
             width: 300,
             alignment: Alignment.bottomCenter,
@@ -163,13 +163,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            height: 500,
+            height: 500,//generates list of classes
             child: ListView.builder(
               itemCount: db.classList.length,
               itemBuilder: (context, index) {
                 return ToDoTile(
                   taskName: db.classList[index][0],
-                  deleteFunction: (context) => deleteTask(index),
+                  deleteFunction: (context) => deleteClass(index),
                 );
               },
             ),
