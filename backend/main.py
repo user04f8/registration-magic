@@ -18,7 +18,7 @@ from utils import url_generator, preprocess_user_input
 COURSE_DATABASE_FILENAME = 'Course_Info.xlsx'
 SCHEDULED_EVENTS_INTERVAL = 1 # seconds per checking scheduled events
 DEFAULT_TIME = datetime(2022, 12, 11, 20, 0, 0)
-DEFAULT_SEMESTER = ('Spring', 2022)
+DEFAULT_SEMESTER = ('Spring', 2023)
 
 async def run_at(dt, method):
     await asyncio.sleep((dt - datetime.now()).total_seconds()) # requires python version 3.8 or above
@@ -60,6 +60,7 @@ def schedule_registration(data : str):
     print(data)
     time_raw = data['time']
     courses = json.loads(data['classList'])
+    plan = 'plan' in data
     try:
         scheduled_time = datetime.strptime(time_raw, r'%d/%m/%Y %I:%M %p') # dd/mm/yyyy hh:mm [AM/PM]
     except:
@@ -71,7 +72,13 @@ def schedule_registration(data : str):
     loop.create_task(run_at(scheduled_time, register(user)))
 
 def test_scheduler():
-    schedule_registration(data = {'classList': '[["CAS MA225 B2"]]', 'time': '12/11/2022 10:53 PM'})
+    schedule_registration(data = {'classList': '[["CAS AA385 A1"]]', 'time': '12/11/2022 11:44 PM'})
+
+#https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670820688?SelectIt=0001151409&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2023&KeySem=20234&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
+#https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670820707?SelectIt=0001151409&College=CAS&Dept=AA&Course=385&Section=A1&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2022&KeySem=20223&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
+
+#https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670820688?SelectIt=0001151409&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2023&KeySem=20234&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
+#https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1670820825?SelectIt=0001151409&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=&ViewSem=Spring+2022&KeySem=20223&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList=
 
 if __name__ == '__main__':
     test_scheduler()

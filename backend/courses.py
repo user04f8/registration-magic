@@ -30,16 +30,21 @@ class Course:
     def __str__(self):
         return ' '.join((self.college, self.department, str(self.course_num), (self.section if self.section is not None else '')))
 
+    @staticmethod
+    def leftpad(selectit : int) -> str:
+        selectit = str(selectit)
+        return '0' * (10 - len(selectit)) + selectit
+
     def getURLparams(self):
         """Return the URL params associated with a course for making a request to the Student Link
         full URL = f'https://www.bu.edu/link/bin/uiscgi_studentlink.pl/{unix_timestamp}' + self.getURLparams(semester) + ...
         e.g.        'https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1668886235?ModuleName=reg%2Fadd%2Fbrowse_schedule.pl&SearchOptionDesc=Class+Number&SearchOptionCd=S&ViewSem=Spring+2023&KeySem=20234&AddPlannerInd=Y&College=CAS&Dept=&Course=000&Section='
         """
-        return f'?SelectIt={self.selectit}&College={self.college}&Dept={self.department}&Course={str(self.course_num)}&Section={self.section}'
+        return f'?SelectIt={Course.leftpad(self.selectit)}' # + '&College={self.college}&Dept={self.department}&Course={str(self.course_num)}&Section={self.section}'
 
 class Semester():
     REGISTER_URL_PARAMS = '&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd='
-    PLAN_URL_PARAMS = REGISTER_URL_PARAMS + 'Y'
+    PLAN_URL_PARAMS = REGISTER_URL_PARAMS + '&ModuleName=plan%2Fadd_planner%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd=Y'
     BOILERPLATE_URL_PARAMS = '&PreregViewSem=&PreregKeySem=&SearchOptionCd=S&SearchOptionDesc=Class+Number&MainCampusInd=&BrowseContinueInd=&ShoppingCartInd=&ShoppingCartList='
     def __init__(self, semester : str, year : int):
         """Returns a Semester object given a semester and Course objects
