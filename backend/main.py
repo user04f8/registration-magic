@@ -2,6 +2,7 @@ import requests
 #import threading
 #import time
 from datetime import datetime
+from time import sleep
 import asyncio
 import threading
 import json
@@ -78,8 +79,14 @@ if __name__ == '__main__':
     loop_thread.start()
     print('Asyncio initialization complete')
     run_app()
-    print('Flask app forcibly stopped; closing loop thread')
-    loop_thread._running = False
+    print('Flask app forcibly stopped; stopping loop')
+    loop.stop()
+    print('Press CTRL+C to close remaining threads')
+    sleep(1)
+    exit()
+    while True: 
+        sleep(1) #catch ctrl + c if exit() fails somehow
+            
     
 
 """

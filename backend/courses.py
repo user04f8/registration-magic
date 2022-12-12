@@ -35,7 +35,7 @@ class Course:
         full URL = f'https://www.bu.edu/link/bin/uiscgi_studentlink.pl/{unix_timestamp}' + self.getURLparams(semester) + ...
         e.g.        'https://www.bu.edu/link/bin/uiscgi_studentlink.pl/1668886235?ModuleName=reg%2Fadd%2Fbrowse_schedule.pl&SearchOptionDesc=Class+Number&SearchOptionCd=S&ViewSem=Spring+2023&KeySem=20234&AddPlannerInd=Y&College=CAS&Dept=&Course=000&Section='
         """
-        return f'?SelectIt={self.selectit}&Section={self.section}'
+        return f'?SelectIt={self.selectit}&College={self.college}&Dept={self.department}&Course={str(self.course_num)}&Section={self.section}'
 
 class Semester():
     REGISTER_URL_PARAMS = '&ModuleName=reg%2Fadd%2Fconfirm_classes.pl&AddPreregInd=&AddPlannerInd='
