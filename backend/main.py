@@ -18,9 +18,22 @@ SCHEDULED_EVENTS_INTERVAL = 1 # seconds per checking scheduled events
 #async def wait_until(dt):
 #    await asyncio.sleep((dt - datetime.datetime.now()).total_seconds())
 
+async def wait_until(dt):
+    # sleep until the specified datetime
+    now = datetime.datetime.now()
+    await asyncio.sleep((dt - now).total_seconds())
+
+async def run_at(dt, coro):
+    await wait_until(dt)
+    return await coro
+
+# https://stackoverflow.com/questions/51292027/how-to-schedule-a-task-in-asyncio-so-it-runs-at-a-certain-date
+
+"""
 async def run_at(dt, method):
     await asyncio.sleep((dt - datetime.datetime.now()).total_seconds()) # requires python version 3.8 or above
     return await method
+    """
 
 async def register(user : User):
     user.register() # runs the register() method on the user exactly once 
