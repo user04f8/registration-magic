@@ -17,16 +17,6 @@ COURSE_DATABASE_FILENAME = 'Course_Info.xlsx'
 SCHEDULED_EVENTS_INTERVAL = 1 # seconds per checking scheduled events
 DEFAULT_TIME = datetime(2022, 12, 11, 20, 0, 0)
 
-"""async def wait_until(dt):
-    # sleep until the specified datetime
-    now = datetime.now()
-    await asyncio.sleep((dt - now).total_seconds())
-
-async def run_at(dt, coro):
-    await wait_until(dt)
-    return await coro
-"""
-
 async def run_at(dt, method):
     await asyncio.sleep((dt - datetime.now()).total_seconds()) # requires python version 3.8 or above
     return await method
@@ -34,22 +24,6 @@ async def run_at(dt, method):
 async def register(user : User):
     print('Performing course registration for user {user.id}:')
     user.register() # runs the register() method on the user exactly once 
-
-"""
-def run_scheduled_actions(interval):
-    cease_continuous_run = threading.Event()
-
-    class ScheduleThread(threading.Thread):
-        @classmethod
-        def run(cls):
-            while not cease_continuous_run.is_set():
-                schedule.run_pending()
-                time.sleep(interval)
-
-    continuous_thread = ScheduleThread()
-    continuous_thread.start()
-    return cease_continuous_run
-"""
 
 app = flask.Flask(__name__) # initialize the Flask app
 coursedb = CourseDB(COURSE_DATABASE_FILENAME) # initialize the database
