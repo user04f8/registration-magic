@@ -1,6 +1,10 @@
 # registration-magic
 Automate BU Registration
 
+##
+- To build this project you must have python and flutter installed on your system. To run the project go to the ui folder and type the command:
+
+-   $flutter run lib/main.dart
 
 ## Running the project
 
@@ -30,3 +34,12 @@ parenthesis = optional
     - ** can scrape from value token of the input tag defining the checkbox TL;DR use the checkbox to get SelectIt info **
 - (Firebase database, or MongoDB -- can decide later for storing user data through authentication)
 
+## Application Demo
+-   https://www.youtube.com/watch?v=ln91Cqp5xLY
+
+## Team Members
+-   Cynthia Young: mcyoung@bu.edu
+-   Sadman Kabir: kabirs@bu.edu
+-   Nathan Clark: nbclark@bu.edu
+-   Peter West: flibble@bu.edu
+-   Oluwaseun Angelo Soyannwo: seun@bu.edu
