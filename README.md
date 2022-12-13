@@ -45,5 +45,5 @@ Built in Python with Flask to receive API info
 -   Nathan Clark: nbclark@bu.edu
 -   Sadman Kabir: kabirs@bu.edu
 -   Oluwaseun Angelo Soyannwo: seun@bu.edu
--   Cynthia Young: mcyoung@bu.edu
 -   Peter West: flibble@bu.edu
+-   Cynthia Young: mcyoung@bu.edu
