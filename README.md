@@ -1,5 +1,5 @@
 # registration-magic
-Automate BU Registration
+This repo contains what was at its time by far the fastest way to complete BU registration, enabling automation ahead of time.
 
 ## Building the project
 To build this project you must have python and flutter installed on your system. To run the project go to the ui folder and type the command:
